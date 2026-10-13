@@ -1,0 +1,72 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para Emanuel ❤️</title>
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #080808;
+  color: white;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 35px 20px;
+}
+.card {
+  max-width: 500px;
+  margin: 35px auto;
+  padding: 30px 22px;
+  border: 1px solid #a90025;
+  border-radius: 20px;
+  background: linear-gradient(145deg,#1b080d,#090909);
+  box-shadow: 0 0 25px #79001f55;
+}
+h1 { color: #ff3158; }
+p { line-height: 1.7; }
+button {
+  background: #d60032;
+  color: white;
+  border: 0;
+  padding: 14px 20px;
+  border-radius: 10px;
+  font-size: 16px;
+  margin: 8px;
+  cursor: pointer;
+}
+.secret { display: none; }
+.heart { font-size: 42px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="heart">❤️</div>
+  <h1>Hola, Emanuel</h1>
+  <p>Alguien que te quiere mucho preparó algo especial para ti.</p>
+  <p>Pero para descubrirlo, tendrás que seguir las pistas...</p>
+  <button onclick="pista(1)">Descubrir pista 1 🔐</button>
+  <div id="p1" class="secret">
+    <p>PISTA 1: Busca a la persona que firma esta sorpresa con una K. ❤️</p>
+    <button onclick="pista(2)">Continuar ❤️</button>
+  </div>
+  <div id="p2" class="secret">
+    <p>PISTA 2: Detrás de esta sorpresa hay alguien que desea verte sonreír.</p>
+    <button onclick="pista(3)">Descubrir el secreto 💌</button>
+  </div>
+  <div id="p3" class="secret">
+    <h2 style="color:#ff3158">Mi secreto para ti ❤️</h2>
+    <p>Emanuel, preparé esto porque eres alguien especial para mí. Quería regalarte algo diferente, algo creado con dedicación y cariño.</p>
+    <p>Ojalá esta pequeña sorpresa te recuerde que detrás de ella hay una persona que piensa en ti y quiere compartir momentos bonitos contigo.</p>
+    <h2>Con cariño, Kiki ❤️</h2>
+  </div>
+</div>
+<script>
+function pista(n) {
+  document.getElementById("p"+n).style.display = "block";
+}
+</script>
+</body>
+</html>

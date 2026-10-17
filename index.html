@@ -274,62 +274,74 @@ small{color:#c5aeb2}
   <p style="font-size:11px;color:#aaa;margin-top:20px;">Acta simbólica de novios, sin validez legal. ❤️</p>
 </section>
 
-
 <script>
-(function(){
+(function () {
   var c = document.getElementById('firma-lienzo');
-  if (!c) return;
+  if (!c || c.dataset.iniciado) return;
+  c.dataset.iniciado = 'si';
 
   var ctx = c.getContext('2d');
-  var drawing = false;
+  var dibujando = false;
 
-  function preparar() {
-    var r = c.getBoundingClientRect();
-    if (r.width <= 0 || r.height <= 0) return false;
+  function ajustar() {
+    var ancho = c.clientWidth;
+    var alto = c.clientHeight;
+    if (!ancho || !alto) return;
 
-    var w = Math.round(r.width * 2);
-    var h = Math.round(r.height * 2);
-
-    if (c.width !== w || c.height !== h) {
-      c.width = w;
-      c.height = h;
+    var imagen = document.createElement('canvas');
+    imagen.width = c.width;
+    imagen.height = c.height;
+    if (imagen.width && imagen.height) {
+      imagen.getContext('2d').drawImage(c, 0, 0);
     }
 
+    c.width = ancho * 2;
+    c.height = alto * 2;
     ctx = c.getContext('2d');
     ctx.setTransform(2, 0, 0, 2, 0, 0);
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 2.5;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
-    ctx.strokeStyle = '#111111';
-    return true;
+    ctx.strokeStyle = '#111';
+
+    if (imagen.width && imagen.height) {
+      ctx.drawImage(imagen, 0, 0, ancho, alto);
+    }
   }
 
-  c.addEventListener('pointerdown', function(e) {
-    if (!preparar()) return;
-    drawing = true;
-    c.setPointerCapture(e.pointerId);
+  function punto(e) {
     var r = c.getBoundingClientRect();
-    ctx.beginPath();
-    ctx.moveTo(e.clientX - r.left, e.clientY - r.top);
-    e.preventDefault();
-  });
+    return { x: e.clientX - r.left, y: e.clientY - r.top };
+  }
 
-  c.addEventListener('pointermove', function(e) {
-    if (!drawing) return;
-    var r = c.getBoundingClientRect();
-    ctx.lineTo(e.clientX - r.left, e.clientY - r.top);
+  c.style.touchAction = 'none';
+
+  c.addEventListener('pointerdown', function (e) {
+    ajustar();
+    dibujando = true;
+    c.setPointerCapture(e.pointerId);
+    var p = punto(e);
+    ctx.beginPath();
+    ctx.moveTo(p.x, p.y);
+    ctx.lineTo(p.x + 0.1, p.y + 0.1);
     ctx.stroke();
     e.preventDefault();
   });
 
-  function terminar() {
-    drawing = false;
-  }
+  c.addEventListener('pointermove', function (e) {
+    if (!dibujando) return;
+    var p = punto(e);
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+    e.preventDefault();
+  });
 
+  function terminar() { dibujando = false; }
   c.addEventListener('pointerup', terminar);
   c.addEventListener('pointercancel', terminar);
 })();
 </script>
+
 
 </body>
 

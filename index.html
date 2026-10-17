@@ -274,39 +274,63 @@ small{color:#c5aeb2}
   <p style="font-size:11px;color:#aaa;margin-top:20px;">Acta simbólica de novios, sin validez legal. ❤️</p>
 </section>
 
+
 <script>
 (function(){
-  var c=document.getElementById('firma-lienzo');
-  if(!c)return;
-  var ctx=c.getContext('2d'),drawing=false;
-  function resize(){
-    var old=document.createElement('canvas');
-    old.width=c.width;old.height=c.height;
-    old.getContext('2d').drawImage(c,0,0);
-    c.width=c.clientWidth*2;c.height=180*2;
-    ctx=c.getContext('2d');
-    ctx.scale(2,2);
-    ctx.lineWidth=2;ctx.lineCap='round';ctx.strokeStyle='#111';
-    if(old.width&&old.height)ctx.drawImage(old,0,0,old.width,old.height,0,0,c.clientWidth,180);
+  var c = document.getElementById('firma-lienzo');
+  if (!c) return;
+
+  var ctx = c.getContext('2d');
+  var drawing = false;
+
+  function preparar() {
+    var r = c.getBoundingClientRect();
+    if (r.width <= 0 || r.height <= 0) return false;
+
+    var w = Math.round(r.width * 2);
+    var h = Math.round(r.height * 2);
+
+    if (c.width !== w || c.height !== h) {
+      c.width = w;
+      c.height = h;
+    }
+
+    ctx = c.getContext('2d');
+    ctx.setTransform(2, 0, 0, 2, 0, 0);
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.strokeStyle = '#111111';
+    return true;
   }
-  resize();
-  function pos(e){
-    var r=c.getBoundingClientRect();
-    return {x:e.clientX-r.left,y:e.clientY-r.top};
+
+  c.addEventListener('pointerdown', function(e) {
+    if (!preparar()) return;
+    drawing = true;
+    c.setPointerCapture(e.pointerId);
+    var r = c.getBoundingClientRect();
+    ctx.beginPath();
+    ctx.moveTo(e.clientX - r.left, e.clientY - r.top);
+    e.preventDefault();
+  });
+
+  c.addEventListener('pointermove', function(e) {
+    if (!drawing) return;
+    var r = c.getBoundingClientRect();
+    ctx.lineTo(e.clientX - r.left, e.clientY - r.top);
+    ctx.stroke();
+    e.preventDefault();
+  });
+
+  function terminar() {
+    drawing = false;
   }
-  c.addEventListener('pointerdown',function(e){
-    drawing=true;c.setPointerCapture(e.pointerId);
-    var p=pos(e);ctx.beginPath();ctx.moveTo(p.x,p.y);
-  });
-  c.addEventListener('pointermove',function(e){
-    if(!drawing)return;
-    var p=pos(e);ctx.lineTo(p.x,p.y);ctx.stroke();
-  });
-  ['pointerup','pointercancel'].forEach(function(ev){
-    c.addEventListener(ev,function(){drawing=false;});
-  });
+
+  c.addEventListener('pointerup', terminar);
+  c.addEventListener('pointercancel', terminar);
 })();
 </script>
+
 </body>
 
 </html>

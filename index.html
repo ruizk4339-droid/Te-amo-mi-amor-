@@ -238,5 +238,75 @@ small{color:#c5aeb2}
   <p class="signature">— tu amorcito  ❤️</p>
  </footer>
 </main>
+
+<!-- ACTA DE MATRIMONIO DE KIMBERLY Y EMANUEL -->
+<section id="acta-amor" style="background:#090909;color:white;border:2px solid #a51d2d;border-radius:18px;padding:24px 16px;margin:35px 0;text-align:center;font-family:Arial,sans-serif;">
+  <div style="font-size:38px;">💍❤️</div>
+  <h2 style="color:#ff4355;">ACTA DE MATRIMONIO</h2>
+  <p>Edición especial para enamorados</p>
+  <hr style="border:1px solid #8d1b29;">
+  <h3 style="color:#ff4355;">Kimberly ❤️ Emanuel</h3>
+  <p>Por amor, locuras y muchos besitos. 💋</p>
+  <p><strong>¿Aceptas casarte conmigo, mi amor? 🥹</strong></p>
+  <p>Prometo besitos, abrazos y mucho amor.</p>
+
+  <button type="button" onclick="document.getElementById('firma-amor').style.display='block';document.getElementById('respuesta-amor').innerHTML='¡Sabía que dirías que sí! 😂❤️';" style="display:block;width:100%;padding:15px;margin:12px 0;background:#a51d2d;color:white;border:0;border-radius:10px;font-size:15px;font-weight:bold;">
+    SÍ, ACEPTO 💍❤️
+  </button>
+
+  <button type="button" onclick="document.getElementById('firma-amor').style.display='block';document.getElementById('respuesta-amor').innerHTML='¡JAJAJA! Mejor di que sí, papi. 😂❤️';" style="display:block;width:100%;padding:15px;margin:12px 0;background:#171717;color:white;border:1px solid #a51d2d;border-radius:10px;font-size:14px;font-weight:bold;">
+    SÍ, NO QUIERO MORIR EN EL INTENTO DE DECIR QUE NO 😂❤️
+  </button>
+
+  <p id="respuesta-amor" style="color:#ff6674;font-weight:bold;"></p>
+
+  <div id="firma-amor" style="display:none;margin-top:22px;">
+    <h3 style="color:#ff4355;">FIRMA DEL NOVIO ✍️</h3>
+    <p>Firma con tu dedo aquí, mi amor.</p>
+    <canvas id="firma-lienzo" style="display:block;width:100%;height:180px;background:white;border-radius:10px;touch-action:none;"></canvas>
+    <button type="button" onclick="document.getElementById('firma-lienzo').getContext('2d').clearRect(0,0,document.getElementById('firma-lienzo').width,document.getElementById('firma-lienzo').height);" style="padding:10px;margin:10px;background:#333;color:white;border:0;border-radius:8px;">
+      Borrar firma
+    </button>
+    <button type="button" onclick="var c=document.getElementById('firma-lienzo');var a=document.createElement('a');a.download='Acta-Kimberly-Emanuel.png';a.href=c.toDataURL('image/png');a.click();" style="display:block;width:100%;padding:14px;background:#a51d2d;color:white;border:0;border-radius:10px;font-weight:bold;">
+      DESCARGAR NUESTRA ACTA ❤️
+    </button>
+  </div>
+  <p style="font-size:11px;color:#aaa;margin-top:20px;">Acta simbólica de novios, sin validez legal. ❤️</p>
+</section>
+
+<script>
+(function(){
+  var c=document.getElementById('firma-lienzo');
+  if(!c)return;
+  var ctx=c.getContext('2d'),drawing=false;
+  function resize(){
+    var old=document.createElement('canvas');
+    old.width=c.width;old.height=c.height;
+    old.getContext('2d').drawImage(c,0,0);
+    c.width=c.clientWidth*2;c.height=180*2;
+    ctx=c.getContext('2d');
+    ctx.scale(2,2);
+    ctx.lineWidth=2;ctx.lineCap='round';ctx.strokeStyle='#111';
+    if(old.width&&old.height)ctx.drawImage(old,0,0,old.width,old.height,0,0,c.clientWidth,180);
+  }
+  resize();
+  function pos(e){
+    var r=c.getBoundingClientRect();
+    return {x:e.clientX-r.left,y:e.clientY-r.top};
+  }
+  c.addEventListener('pointerdown',function(e){
+    drawing=true;c.setPointerCapture(e.pointerId);
+    var p=pos(e);ctx.beginPath();ctx.moveTo(p.x,p.y);
+  });
+  c.addEventListener('pointermove',function(e){
+    if(!drawing)return;
+    var p=pos(e);ctx.lineTo(p.x,p.y);ctx.stroke();
+  });
+  ['pointerup','pointercancel'].forEach(function(ev){
+    c.addEventListener(ev,function(){drawing=false;});
+  });
+})();
+</script>
 </body>
+
 </html>
